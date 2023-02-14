@@ -39,11 +39,11 @@ RUN echo "Types: deb\n"\
 RUN apt update \
     && apt install -y jellyfin-ffmpeg=$JELLYFIN_VERSION-$(awk -F'=' '/^VERSION_CODENAME=/{ print $NF }' /etc/os-release)
 
+# If we have VERSION set (i.e. different than empty), then we want to download it from AWS
+RUN $(if [ -n "$VERSION" ] ; then wget http://stremio-artifacts.s3.amazonaws.com/server/${BUILD}/${VERSION}/server.js; fi)
 
-# RUN wget http://stremio-artifacts.s3.amazonaws.com/server/${BUILD}/${VERSION}/server.js
-
-# This copy will override the server.js that was downloaded with the one provided in this folder
-# for custom or manual builds
+# This copy could will override the server.js that was downloaded with the one provided in this folder
+# for custom or manual builds if $VERSION argument is not empty.
 COPY . .
 
 VOLUME ["/root/.stremio-server"]
