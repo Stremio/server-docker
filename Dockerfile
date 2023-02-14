@@ -3,8 +3,6 @@ ARG NODE_VERSION=14
 
 FROM node:$NODE_VERSION
 
-WORKDIR /stremio
-
 ARG VERSION=master
 # Which build to download for the image,
 # possible values are: desktop, android, androidtv, webos and tizen
@@ -13,6 +11,12 @@ ARG VERSION=master
 # - Node.js `v4.4.3` for Tizen 3.0 (2017 Samsung TV)
 # But, as of writing this, we only support desktop!
 ARG BUILD=desktop
+
+LABEL com.stremio.vendor="Smart Code Ltd."
+LABEL version=${VERSION}
+LABEL description="Stremio's stremaing Server.js"
+
+WORKDIR /stremio
 
 # We require versoin <= 4.4.1
 # https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v4.4.1-4
