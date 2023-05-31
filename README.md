@@ -9,9 +9,9 @@ for more information check the `Dockerfile`.
 
 For the desktop build (currently, the only supported platform) do not pass the `BUILD` argument:
 
-- Build docker image with `server.js` version `4.19.0`:
+- Build docker image with `server.js` version `v4.19.0`:
 
-`docker build --build-arg VERSION=4.19.0 -t stremio/server:latest .`
+`docker build --build-arg VERSION=v4.19.0 -t stremio/server:latest .`
 
 - Build a Docker image with a local `server.js` found in the root of the folder:
 **Note:** By passing an empty `VERSION` argument you will skip downloading the `server.js` from AWS before overriding it with your local one.
