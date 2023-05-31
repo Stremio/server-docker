@@ -14,7 +14,7 @@ ARG BUILD=desktop
 
 LABEL com.stremio.vendor="Smart Code Ltd."
 LABEL version=${VERSION}
-LABEL description="Stremio's stremaing Server.js"
+LABEL description="Stremio's stremaing Server"
 
 WORKDIR /stremio
 
