@@ -1,3 +1,5 @@
+# Copyright (C) 2017-2023 Smart code 203358507
+
 # the node version for running the server
 ARG NODE_VERSION=14
 
