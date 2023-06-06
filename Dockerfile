@@ -16,11 +16,11 @@ ARG BUILD=desktop
 
 LABEL com.stremio.vendor="Smart Code Ltd."
 LABEL version=${VERSION}
-LABEL description="Stremio's stremaing Server"
+LABEL description="Stremio's streaming Server"
 
 WORKDIR /stremio
 
-# We require versoin <= 4.4.1
+# We require version <= 4.4.1
 # https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v4.4.1-4
 ARG JELLYFIN_VERSION=4.4.1-4
 
