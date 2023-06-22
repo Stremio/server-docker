@@ -1,3 +1,5 @@
+# Copyright (C) 2017-2023 Smart code 203358507
+
 # the node version for running the server
 ARG NODE_VERSION=14
 
@@ -22,7 +24,7 @@ CMD ["bash"]
 
 WORKDIR /stremio
 
-# We require versoin <= 4.4.1
+# We require version <= 4.4.1
 # https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v4.4.1-4
 ARG JELLYFIN_VERSION=4.4.1-4
 
