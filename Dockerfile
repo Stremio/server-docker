@@ -69,4 +69,8 @@ ENV APP_PATH=
 # Use `NO_CORS=1` to disable the server's CORS checks
 ENV NO_CORS=
 
+# "Docker image shouldn't attempt to find network devices or local video players."
+# See: https://github.com/Stremio/server-docker/issues/7
+ENV CASTING_DISABLED=1
+
 ENTRYPOINT [ "node", "server.js" ]
