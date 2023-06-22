@@ -14,7 +14,11 @@ ARG BUILD=desktop
 
 LABEL com.stremio.vendor="Smart Code Ltd."
 LABEL version=${VERSION}
-LABEL description="Stremio's stremaing Server"
+LABEL description="Stremio's streaming Server"
+
+SHELL ["/bin/sh", "-c"]
+
+CMD ["bash"]
 
 WORKDIR /stremio
 
@@ -22,29 +26,24 @@ WORKDIR /stremio
 # https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v4.4.1-4
 ARG JELLYFIN_VERSION=4.4.1-4
 
-RUN echo $(awk -F'=' '/^ID=/{ print $NF }' /etc/os-release)
-RUN echo $( awk -F'=' '/^VERSION_CODENAME=/{ print $NF }' /etc/os-release )
-RUN echo $( dpkg --print-architecture )
+# SHELL ["/bin/bash", "-c"]
 
-RUN apt install curl gnupg ca-certificates git \
-    && mkdir /etc/apt/keyrings \
-    && curl -fsSL --insecure https://repo.jellyfin.org/$( awk -F'=' '/^ID=/{ print $NF }' /etc/os-release )/jellyfin_team.gpg.key | gpg --dearmor -o /etc/apt/keyrings/jellyfin.gpg
+# COPY qemu-arm-static /usr/bin/qemu-arm-static
 
-# Add the jellyfin repository
-RUN echo "Types: deb\n"\
-"URIs: https://repo.jellyfin.org/"$( awk -F'=' '/^ID=/{ print $NF }' /etc/os-release )"\n"\
-"Suites: "$( awk -F'=' '/^VERSION_CODENAME=/{ print $NF }' /etc/os-release )"\n"\
-"Components: main \n"\
-"Architectures: $( dpkg --print-architecture ) \n"\
-"Signed-By: /etc/apt/keyrings/jellyfin.gpg" \
-    >> jellyfin.sources \
-    && mv jellyfin.sources /etc/apt/sources.list.d
+COPY setup_jellyfin_repo.sh setup_jellyfin_repo.sh
 
-RUN apt update \
-    && apt install -y jellyfin-ffmpeg=$JELLYFIN_VERSION-$(awk -F'=' '/^VERSION_CODENAME=/{ print $NF }' /etc/os-release)
+RUN ./setup_jellyfin_repo.sh
+# No need for updating because the shell script above does that for us.
+# RUN apt update
 
+RUN apt install -y jellyfin-ffmpeg=$JELLYFIN_VERSION-$(awk -F'=' '/^VERSION_CODENAME=/{ print $NF }' /etc/os-release)
+
+# RUN apt install -y bash
+COPY download_server.sh download_server.sh
+# RUN /bin/bash -c download_server.sh
+RUN ./download_server.sh
 # If we have VERSION set (i.e. different than empty), then we want to download it from AWS
-RUN $(if [ -n "$VERSION" ] ; then wget https://dl.strem.io/server/${VERSION}/${BUILD}/server.js; fi)
+# RUN $(if [ -n "$VERSION" ] ; then wget https://dl.strem.io/server/${VERSION}/${BUILD}/server.js; fi)
 
 # This copy could will override the server.js that was downloaded with the one provided in this folder
 # for custom or manual builds if $VERSION argument is not empty.
@@ -52,11 +51,20 @@ COPY . .
 
 VOLUME ["/root/.stremio-server"]
 
+# HTTP
 EXPOSE 11470
+
+# HTTPS
+EXPOSE 12470
+
+# UDP Multicast port
+EXPOSE 5353
 
 ENV FFMPEG_BIN=
 ENV FFPROBE_BIN=
 ENV APP_PATH=
+
+# Use `NO_CORS=1` to disable the server's CORS checks
 ENV NO_CORS=
 
 ENTRYPOINT [ "node", "server.js" ]
