@@ -1,5 +1,7 @@
 # The Stremio streaming server.js Docker image
 
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/stremio/server?label=stremio%2Fserver%3Alatest)](https://hub.docker.com/r/stremio/server)
+
 ## Build image
 
 Docker image can be easily built using the included [`Dockerfile`](./Dockerfile).
