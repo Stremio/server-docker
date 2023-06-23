@@ -2,7 +2,25 @@
 
 ## Run the image
 
-`docker run --rm -d -p 11470:11470 stremio/server:latest`
+`docker run --rm -d -p 11470:11470 -p 12470:12470 stremio/server:latest`
+
+If you're running `stremio-web` locally then you should disable CORS on the server by passing `NO_CORS=1` to the env. variables:
+
+`docker run --rm -d -p 11470:11470 -p 12470:12470 stremio/server:latest`
+
+Available ports:
+- 11470 - http
+- 12470 - https
+
+Env. variables:
+
+`FFMPEG_BIN` - full path to the ffmpeg binary, on platforms where it cannot be reliably determined by the ffmpeg-static package (e.g. darwin aarch64)
+
+`FFPROBE_BIN` - full path to the ffprobe binary
+
+`APP_PATH` - custom application path for storing server settings, certificates, etc
+
+`NO_CORS` - if set to any value it will disable the CORS checks on the server.
 
 ## Build image
 

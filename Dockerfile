@@ -44,8 +44,6 @@ RUN apt install -y jellyfin-ffmpeg=$JELLYFIN_VERSION-$(awk -F'=' '/^VERSION_CODE
 COPY download_server.sh download_server.sh
 # RUN /bin/bash -c download_server.sh
 RUN ./download_server.sh
-# If we have VERSION set (i.e. different than empty), then we want to download it from AWS
-# RUN $(if [ -n "$VERSION" ] ; then wget https://dl.strem.io/server/${VERSION}/${BUILD}/server.js; fi)
 
 # This copy could will override the server.js that was downloaded with the one provided in this folder
 # for custom or manual builds if $VERSION argument is not empty.
@@ -59,11 +57,13 @@ EXPOSE 11470
 # HTTPS
 EXPOSE 12470
 
-# UDP Multicast port
-EXPOSE 5353
-
+# full path to the ffmpeg binary
 ENV FFMPEG_BIN=
+
+# full path to the ffprobe binary
 ENV FFPROBE_BIN=
+
+# Custom application path for storing server settings, certificates, etc
 ENV APP_PATH=
 
 # Use `NO_CORS=1` to disable the server's CORS checks

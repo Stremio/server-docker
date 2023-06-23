@@ -20,6 +20,7 @@ else
     echo
 fi
 
+# If we have VERSION set (i.e. different than empty), then we want to download it from AWS
 if [ -n "$VERSION" ] ; then
     $FETCH https://dl.strem.io/server/${VERSION}/${BUILD}/server.js
 fi
