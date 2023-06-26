@@ -35,15 +35,11 @@ For the **desktop build** (currently, the only supported platform) do not pass t
 
 If you're cross-building the image from x86 to arm, you need to either use a [QEMU binary or `multiarch/qemu-user-static` (see below)](#cross-building)
 
-- Platform: `linux/x86_64`:
-
-`docker buildx build --platform linux/x86_64 --build-arg VERSION=v4.20.1 -t stremio/server:latest .`
-
-- Platform: `linux/amd64`:
+- Platform: `linux/amd64` (also used for `linux/x86_64`):
 
 `docker buildx build --platform linux/amd64 --build-arg VERSION=v4.20.1 -t stremio/server:latest .`
 
-- Platform: `linux/arm64`:
+- Platform: `linux/arm64` (alias of `linux/arm64/v8`):
 
 `docker buildx build --platform linux/arm64 --build-arg VERSION=v4.20.1 -t stremio/server:latest .`
 
@@ -72,9 +68,8 @@ Cross building the image from an `x86` to `arm` architecture, you need to either
 - arm/v7
   `docker buildx build --platform linux/arm/v7 -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static --build-arg VERSION=v4.20.1 -t stremio/server:latest .`
 
-- arm64/v8:
-  `linux/arm64/v8`:
-`docker buildx build --platform linux/arm64/v8 --build-arg VERSION=v4.20.1 -t stremio/server:latest .`
+- arm64 / arm64/v8
+`docker buildx build --platform linux/arm64 --build-arg VERSION=v4.20.1 -t stremio/server:latest .`
 
 #### Using `multiarch/qemu-user-static` image
 
@@ -97,3 +92,14 @@ Other arguments:
 
 - `NODE_VERSION` - the version which will be included in the image and `server.js` will be ran with.
 - `JELLYFIN_VERSION` - `jellyfin-ffmpeg` version, we currently require version **<= 4.4.1**.
+
+## Publishing on Docker Hub
+
+1. Update version tag:
+
+`docker buildx build --push --platform linux/arm64,linux/arm/v7,linux/amd64 --build-arg VERSION=v4.20.1 -t stremio/server:4.20.1 .`
+
+2. Update latest tag:
+
+
+`docker buildx build --push --platform linux/arm64,linux/arm/v7,linux/amd64 --build-arg VERSION=v4.20.1 -t stremio/server:latest .`

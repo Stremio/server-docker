@@ -36,7 +36,9 @@ jobs:
           context: .
           # GH action: https://docs.docker.com/build/ci/github-actions/multi-platform/
           # Docs: https://docs.docker.com/engine/reference/commandline/buildx_build/#platform
-          platforms: linux/amd64,linux/arm64,linux/arm64/v8,linux/arm/v7,linux/x86_64
+          # `linux/amd64` is used for linux/x86_64
+          # `linux/arm64` and linux/arm64/v8 are aliases!
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           build-args: VERSION=${{ github.event.client_payload.tag }}
           # Tag as latest and the `client_payload` version tag
