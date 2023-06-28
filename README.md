@@ -1,4 +1,5 @@
 # The Stremio streaming Server Docker image
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/stremio/server?label=stremio%2Fserver%3Alatest)](https://hub.docker.com/r/stremio/server)
 
 ## Run the image
 
@@ -6,7 +7,7 @@
 
 If you're running `stremio-web` locally then you should disable CORS on the server by passing `NO_CORS=1` to the env. variables:
 
-`docker run --rm -d -p 11470:11470 -p 12470:12470 stremio/server:latest`
+`docker run --rm -d -p 11470:11470 -p 12470:12470 -e NO_CORS=1 stremio/server:latest`
 
 Available ports:
 - 11470 - http
@@ -21,8 +22,6 @@ Env. variables:
 `APP_PATH` - custom application path for storing server settings, certificates, etc
 
 `NO_CORS` - if set to any value it will disable the CORS checks on the server.
-
-[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/stremio/server?label=stremio%2Fserver%3Alatest)](https://hub.docker.com/r/stremio/server)
 
 ## Build image
 
