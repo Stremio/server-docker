@@ -28,6 +28,9 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: stremio/server
+
+      - name: Checkout
+        uses: actions/checkout@v4
       
       - name: Build and push Docker image
         # docs: https://github.com/docker/build-push-action
