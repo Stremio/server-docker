@@ -34,6 +34,8 @@ For the **desktop build** (currently, the only supported platform) do not pass t
 
 ### Example: Build a Docker image with Server v4.20.1
 
+**NB:** On a new Ubuntu release you must update the [`setup_jellyfin_repo.sh`](./setup_jellyfin_repo.sh) shell script for `jellyfin-ffmpeg`.
+
 If you're cross-building the image from x86 to arm, you need to either use a [QEMU binary or `multiarch/qemu-user-static` (see below)](#cross-building)
 
 - Platform: `linux/amd64` (also used for `linux/x86_64`):
@@ -52,32 +54,23 @@ If you're cross-building the image from x86 to arm, you need to either use a [QE
 Cross building the image from an `x86` to `arm` architecture, you need to either use QEMU emulation binary or the `multiarch/qemu-user-static` docker image.
 
 #### Using QEMU
-1. Setup QEMU:
-    ```
-    apt-get update && apt-get install -y --no-install-recommends qemu-user-static binfmt-support
-    update-binfmts --enable qemu-arm
-    update-binfmts --display qemu-arm
-    ```
 
-    ```
-    mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc
-    echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register 
-    ```
+Setup `binfmt` if you're not on Docker Desktop, if you are you can skip this step.
+See https://docs.docker.com/build/building/multi-platform/#qemu for more details.
 
-    Source: https://matchboxdorry.gitbooks.io/matchboxblog/content/blogs/build_and_run_arm_images.html
-2. Build image with attached volume:
+`docker run --privileged --rm tonistiigi/binfmt --install all`
+
 - arm/v7
-  `docker buildx build --platform linux/arm/v7 -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static --build-arg VERSION=v4.20.1 -t stremio/server:latest .`
+  `docker buildx build --platform linux/arm/v7 --build-arg VERSION=v4.20.1 -t stremio/server:latest .`
 
 - arm64 / arm64/v8
-`docker buildx build --platform linux/arm64 --build-arg VERSION=v4.20.1 -t stremio/server:latest .`
+  `docker buildx build --platform linux/arm64 --build-arg VERSION=v4.20.1 -t stremio/server:latest .`
 
 #### Using `multiarch/qemu-user-static` image
 
 For more details check https://github.com/multiarch/qemu-user-static.
 
 `docker run --rm --privileged multiarch/qemu-user-static --reset -p yes`
-
 
 - Build a Docker image with a local `server.js` found in the root of the folder:
 **Note:** By passing an empty `VERSION` argument you will skip downloading the `server.js` from AWS before overriding it with your local one.
