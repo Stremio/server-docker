@@ -72,4 +72,6 @@ ENV NO_CORS=
 # See: https://github.com/Stremio/server-docker/issues/7
 ENV CASTING_DISABLED=1
 
+ENV NVIDIA_DRIVER_CAPABILITIES=video
+
 ENTRYPOINT [ "node", "server.js" ]
