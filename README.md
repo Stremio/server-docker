@@ -89,7 +89,7 @@ Other arguments:
 
 ## Publishing on Docker Hub
 
-New releases of Stremio Server are automatically released in Docker Hub using the [publish.yml](./.githib/workflows/publish.yml) using a custom event type called "new-release" and client payload containing the release tag version.
+New releases of Stremio Server are automatically released in Docker Hub using the [publish.yml](.github/workflows/publish.yml) using a custom event type called "new-release" and client payload containing the release tag version.
 
 You can also manually trigger this action with curl and a Personal Access Token generated from Github:
 ```
