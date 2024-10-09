@@ -34,6 +34,7 @@ ARG JELLYFIN_VERSION=4.4.1-4
 
 
 # RUN apt update and install wget
+RUN apt -y update && apt -y install wget
 RUN wget https://repo.jellyfin.org/archive/ffmpeg/debian/${JELLYFIN_VERSION}/jellyfin-ffmpeg_${JELLYFIN_VERSION}-$(dpkg --status tzdata|awk -F'[:-]' '$1=="Provides"{print $NF}')_$(dpkg --print-architecture).deb -O jellyfin-ffmpeg_${JELLYFIN_VERSION}-$(dpkg --status tzdata|awk -F'[:-]' '$1=="Provides"{print $NF}').deb
 RUN apt -y install ./jellyfin-ffmpeg_${JELLYFIN_VERSION}-$(dpkg --status tzdata|awk -F'[:-]' '$1=="Provides"{print $NF}').deb
 RUN rm jellyfin-ffmpeg_${JELLYFIN_VERSION}-$(dpkg --status tzdata|awk -F'[:-]' '$1=="Provides"{print $NF}').deb
