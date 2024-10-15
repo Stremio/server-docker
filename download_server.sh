@@ -6,7 +6,7 @@ WGET=$( which wget )
 
 # Pick our optimal fetching program (curl, then wget, then install curl)
 if [[ -n ${CURL} ]]; then
-    FETCH="${CURL} -O"
+    FETCH="${CURL} --fail -O"
 elif [[ -n ${WGET} ]]; then
     FETCH="${WGET}"
 else
@@ -16,7 +16,7 @@ else
     echo "> Installing required dependencies."
     apt install --yes curl
 
-    FETCH="${CURL} -O"
+    FETCH="${CURL} --fail -O"
     echo
 fi
 
