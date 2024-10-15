@@ -1,0 +1,19 @@
+version: "3.3"
+services:
+  server:
+    container_name: stremio_server
+    image: stremio/server:latest
+    ports:
+      - 11470:11470
+      - 12470:12470
+    volumes:
+      - /bin/ffmpeg:/bin/ffmpeg:ro
+      - /bin/ffprobe:/bin/ffprobe:ro
+    networks:
+      - proxy
+    environment:
+      - FFMPEG_BIN=/bin/ffmpeg
+      - FFPROBE_BIN=/bin/ffprobe
+      # Uncomment and set value as needed
+      #- APP_PATH=""
+      #- NO_CORS=0 
