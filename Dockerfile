@@ -33,16 +33,29 @@ ARG JELLYFIN_VERSION=4.4.1-4
 # COPY qemu-arm-static /usr/bin/qemu-arm-static
 
 
-# RUN apt update and install wget
-RUN apt -y update && apt -y install wget
-RUN wget https://repo.jellyfin.org/archive/ffmpeg/debian/4.4.1-4/jellyfin-ffmpeg_4.4.1-4-buster_$(dpkg --print-architecture).deb -O jellyfin-ffmpeg_4.4.1-4-buster.deb
-RUN apt -y install ./jellyfin-ffmpeg_4.4.1-4-buster.deb
-RUN rm jellyfin-ffmpeg_4.4.1-4-buster.deb
+# Install jellyfin-ffmpeg
+RUN \
+  --mount=type=cache,id=apt,target=/var/cache/apt \
+  --mount=type=cache,id=apt-lists,target=/var/lib/apt/lists \
+  <<eot
+  set -xeu
 
-# RUN apt install -y bash
-COPY download_server.sh download_server.sh
-# RUN /bin/bash -c download_server.sh
-RUN ./download_server.sh
+  export DEBIAN_FRONTEND=noninteractive
+  apt-get update -qq
+
+  os=$(. /etc/os-release; echo "$VERSION_CODENAME")
+  arch=$(dpkg --print-architecture)
+  version="$JELLYFIN_VERSION"
+  url="https://repo.jellyfin.org/archive/ffmpeg/debian/${version}/jellyfin-ffmpeg_${version}-${os}_${arch}.deb"
+  deb=/tmp/jellyfin-ffmpeg.deb
+
+  curl -sSfL -o "$deb" "$url"
+  apt -y install "$deb"
+  rm "$deb"
+eot
+
+# Run download_server.sh
+RUN curl -sSfL -O https://dl.strem.io/server/${VERSION}/${BUILD}/server.js
 
 # This copy could will override the server.js that was downloaded with the one provided in this folder
 # for custom or manual builds if $VERSION argument is not empty.
