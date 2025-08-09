@@ -18,17 +18,11 @@ LABEL com.stremio.vendor="Smart Code Ltd."
 LABEL version=${VERSION}
 LABEL description="Stremio's streaming Server"
 
-SHELL ["/bin/sh", "-c"]
-
-CMD ["bash"]
-
 WORKDIR /stremio
 
 # We require version <= 4.4.1
 # https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v4.4.1-4
 ARG JELLYFIN_VERSION=4.4.1-4
-
-# SHELL ["/bin/bash", "-c"]
 
 # COPY qemu-arm-static /usr/bin/qemu-arm-static
 
