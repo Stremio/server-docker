@@ -10,7 +10,7 @@ if [[ -n ${CURL} ]]; then
 elif [[ -n ${WGET} ]]; then
     FETCH="${WGET}"
 else
-    echo "Failed to find a suitable download program. We're not sure how you dowloaded this script, but we'll install 'curl' automatically."
+    echo "Failed to find a suitable download program. We're not sure how you downloaded this script, but we'll install 'curl' automatically."
     # shellcheck disable=SC2206
     # We are OK with word-splitting here since we control the contents
     echo "> Installing required dependencies."
